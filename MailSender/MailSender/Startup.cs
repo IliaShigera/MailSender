@@ -26,8 +26,20 @@ namespace MailSender
             services.AddDbContext<MailSender.Models.AppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<MailSender.Models.AppContext>();
+            
+            services.AddIdentity<User, IdentityRole>(optins =>
+            {
+                optins.Password.RequireDigit = false;
+                optins.Password.RequireLowercase = false;
+                optins.Password.RequireNonAlphanumeric = false;
+                optins.Password.RequiredLength = 6;
+
+                optins.User.RequireUniqueEmail = false;
+                optins.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                optins.SignIn.RequireConfirmedEmail = false;
+            })
+                  .AddEntityFrameworkStores<MailSender.Models.AppContext>()
+                  .AddDefaultTokenProviders();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
