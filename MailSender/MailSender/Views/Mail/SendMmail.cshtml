@@ -1,0 +1,31 @@
+﻿@model MailRequest
+
+@{
+    ViewData["Title"] = "Send Email Page";
+}
+
+<h2>Отправка Email</h2>
+<form method="post" asp-controller="Mail" asp-action="SendMail">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="ToEmail"></label><br />
+        <input asp-for="ToEmail" />
+        <span asp-validation-for="ToEmail"></span>
+    </div>
+    <div>
+        <label asp-for="Subject"></label><br />
+        <input asp-for="Subject" />
+    </div>
+    <div>
+        <label asp-for="Body"></label><br />
+        <input asp-for="Body" />
+        <span asp-validation-for="Body"></span>
+    </div>
+    <div>
+        <label asp-for="Attachments"></label><br />
+        <input asp-for="Attachments" />
+    </div>
+    <div>
+        <input type="submit" value="Send" />
+    </div>
+</form>
