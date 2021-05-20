@@ -1,4 +1,5 @@
 using MailSender.Models;
+using MailSender.Service;
 using MailSender.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,7 +43,9 @@ namespace MailSender
                   .AddEntityFrameworkStores<MailSender.Models.AppContext>()
                   .AddDefaultTokenProviders();
 
+            services.AddTransient<IMailService, MailService>();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
