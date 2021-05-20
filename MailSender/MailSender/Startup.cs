@@ -1,3 +1,4 @@
+using EasyData.Services;
 using MailSender.Models;
 using MailSender.Service;
 using MailSender.Settings;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using EasyData.Services;
 using System;
 
 namespace MailSender
@@ -28,7 +30,7 @@ namespace MailSender
             services.AddDbContext<MailSender.Models.AppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            
+
             services.AddIdentity<User, IdentityRole>(optins =>
             {
                 optins.Password.RequireDigit = false;
@@ -44,8 +46,7 @@ namespace MailSender
                   .AddDefaultTokenProviders();
 
             services.AddTransient<IMailService, MailService>();
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -68,12 +69,22 @@ namespace MailSender
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapEasyData(options => {
+                    options.UseDbContext<MailSender.Models.AppContext>();
+                });
+                endpoints.MapControllers();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
         }
     }
 }

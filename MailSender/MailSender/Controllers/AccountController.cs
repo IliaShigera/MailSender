@@ -91,5 +91,7 @@ namespace MailSender.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult EasyData() => View();
     }
 }
